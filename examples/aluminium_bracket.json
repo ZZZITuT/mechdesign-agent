@@ -1,0 +1,23 @@
+{
+  "_label": "EXAMPLE: aluminium bracket (illustrative values, not a real product specification)",
+  "length_mm": 60.0,
+  "width_mm": 15.0,
+  "height_mm": 4.0,
+  "material": {
+    "name": "Aluminium 6061-T6",
+    "E_GPa": 68.9,
+    "density_kg_m3": 2700.0
+  },
+  "load_N": 20.0,
+  "allowable_deflection_mm": 0.1,
+  "allowable_stress_MPa": 100.0,
+  "max_aspect_ratio": 3.0,
+  "search": {
+    "b_min_mm": 4.0,
+    "b_max_mm": 20.0,
+    "b_step_mm": 1.0,
+    "h_min_mm": 2.0,
+    "h_max_mm": 10.0,
+    "h_step_mm": 0.5
+  }
+}

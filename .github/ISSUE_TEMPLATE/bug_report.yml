@@ -1,0 +1,47 @@
+name: Bug report
+description: Something does not work, or a number looks wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! For wrong or suspicious numbers, please attach the configuration
+        JSON (the **Save inputs** button in the app) so the result can be reproduced exactly.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration JSON
+      description: Paste the saved inputs (remove anything confidential).
+      render: json
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected value and its source
+      description: For numerical issues, the value you expected and where it comes from (hand calculation, reference, other solver).
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `mechdesign --version`
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Python version, browser
+  - type: dropdown
+    id: llm
+    attributes:
+      label: Language layer
+      options:
+        - Rule-based fallback (no API key)
+        - LLM (API key configured)
+        - Not relevant

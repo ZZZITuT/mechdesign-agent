@@ -1,0 +1,23 @@
+{
+  "_label": "Textbook check: steel bar, delta = 0.2 mm and sigma = 60 MPa by hand calculation",
+  "length_mm": 100.0,
+  "width_mm": 10.0,
+  "height_mm": 10.0,
+  "material": {
+    "name": "Structural steel",
+    "E_GPa": 200.0,
+    "density_kg_m3": 7850.0
+  },
+  "load_N": 100.0,
+  "allowable_deflection_mm": 0.25,
+  "allowable_stress_MPa": null,
+  "max_aspect_ratio": null,
+  "search": {
+    "b_min_mm": 4.0,
+    "b_max_mm": 20.0,
+    "b_step_mm": 1.0,
+    "h_min_mm": 4.0,
+    "h_max_mm": 20.0,
+    "h_step_mm": 1.0
+  }
+}

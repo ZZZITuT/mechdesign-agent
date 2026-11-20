@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+      - name: Syntax-check front-end modules
+        run: |
+          for f in src/mechdesign/web/*.js; do cp "$f" /tmp/check.mjs && node --check /tmp/check.mjs; done
+
+  test:
+    name: Tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.10", "3.13"]
+        include:
+          - os: ubuntu-latest
+            python: "3.11"
+          - os: ubuntu-latest
+            python: "3.12"
+    env:
+      MECHDESIGN_DISABLE_LLM: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: pytest --cov --cov-report=term --cov-report=xml
+      - name: Validation suite (independent FE cross-checks)
+        run: mechdesign validate
+      - name: CLI smoke test
+        run: |
+          mechdesign example -o example.json
+          mechdesign run example.json --top 3
+          mechdesign report example.json -o report.md
+
+  test-minimal:
+    name: Tests without optional extras
+    runs-on: ubuntu-latest
+    env:
+      MECHDESIGN_DISABLE_LLM: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e . pytest httpx
+      - run: pytest
+      - run: mechdesign validate
+
+  launcher:
+    name: One-step launcher (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      MECHDESIGN_DISABLE_LLM: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: First run creates .venv, installs and serves the app
+        shell: bash
+        run: |
+          python start.py --no-browser --port 8765 > launcher.log 2>&1 &
+          for i in $(seq 1 150); do
+            if curl -sf http://127.0.0.1:8765/api/health; then exit 0; fi
+            sleep 2
+          done
+          cat launcher.log
+          exit 1
+
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build
+      - run: python -m build
+      - name: Check the wheel ships the web assets
+        run: |
+          python -m zipfile -l dist/*.whl | grep -q "mechdesign/web/index.html"
+          python -m zipfile -l dist/*.whl | grep -q "mechdesign/web/app.js"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/

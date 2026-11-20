@@ -1,0 +1,500 @@
+{
+ "generated": "2026-11-20T02:22:57+08:00",
+ "environment": {
+  "python": "3.10.18",
+  "mechdesign": "0.1.0",
+  "numpy": "2.2.6",
+  "scipy": "1.15.3",
+  "anastruct": "1.7.1",
+  "platform": "Windows-10-10.0.26200-SP0"
+ },
+ "cases": [
+  {
+   "id": "C1",
+   "description": "Example PLA mount (L/h = 13.3)",
+   "inputs": {
+    "L_mm": 80,
+    "b_mm": 20,
+    "h_mm": 6,
+    "E_GPa": 3.5,
+    "F_N": 5,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 0.6772486772486774,
+    "sigma_MPa": 3.3333333333333335
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 0.6772486772436643,
+    "sigma_MPa": 3.3333333333160264,
+    "rel_delta": -7.402205679462277e-12,
+    "rel_sigma": -5.192169919610023e-12
+   },
+   "q8_continuum": {
+    "delta_mm": 0.6790605003878362,
+    "timoshenko_delta_mm": 0.6802201058201061,
+    "rel_vs_timoshenko": -0.0017047503041266534,
+    "rel_vs_euler_bernoulli": 0.00267527010391405,
+    "midspan_sigma_MPa": 1.6977742999269367,
+    "beam_sigma_at_x_MPa": 1.6981132075471699,
+    "rel_midspan_sigma": -0.00019957893191513656,
+    "mesh": "53x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 0.6772486318358552,
+    "sigma_MPa": 3.333333258829796,
+    "rel_delta": -6.705487037667949e-08,
+    "rel_sigma": -2.235106131993234e-08
+   }
+  },
+  {
+   "id": "C2",
+   "description": "Lightest feasible example candidate (L/h = 7.3)",
+   "inputs": {
+    "L_mm": 80,
+    "b_mm": 5,
+    "h_mm": 11,
+    "E_GPa": 3.5,
+    "F_N": 5,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 0.43962648921326625,
+    "sigma_MPa": 3.9669421487603307
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 0.4396264892141433,
+    "sigma_MPa": 3.966942148729522,
+    "rel_delta": 1.9950238872132146e-12,
+    "rel_sigma": -7.76645611040294e-12
+   },
+   "q8_continuum": {
+    "delta_mm": 0.44462922617336026,
+    "timoshenko_delta_mm": 0.4461096060963831,
+    "rel_vs_timoshenko": -0.0033184219814873135,
+    "rel_vs_euler_bernoulli": 0.011379516664354472,
+    "midspan_sigma_MPa": 2.0511339830477238,
+    "beam_sigma_at_x_MPa": 2.0518666286691367,
+    "rel_midspan_sigma": -0.0003570629841025945,
+    "mesh": "29x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 0.43962645973377146,
+    "sigma_MPa": 3.966942060090039,
+    "rel_delta": -6.705577467106568e-08,
+    "rel_sigma": -2.2352302759342516e-08
+   }
+  },
+  {
+   "id": "C3",
+   "description": "Slender PETG strip (L/h = 37.5)",
+   "inputs": {
+    "L_mm": 150,
+    "b_mm": 10,
+    "h_mm": 4,
+    "E_GPa": 2.1,
+    "F_N": 2,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 20.089285714285708,
+    "sigma_MPa": 11.249999999999998
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 20.08928571416694,
+    "sigma_MPa": 11.249999999971147,
+    "rel_delta": -5.911912934506191e-12,
+    "rel_sigma": -2.5646554099188914e-12
+   },
+   "q8_continuum": {
+    "delta_mm": 20.088773405041657,
+    "timoshenko_delta_mm": 20.10042857142857,
+    "rel_vs_timoshenko": -0.0005798466607561566,
+    "rel_vs_euler_bernoulli": -2.5501615703903296e-05,
+    "midspan_sigma_MPa": 5.624600729590416,
+    "beam_sigma_at_x_MPa": 5.624999999999999,
+    "rel_midspan_sigma": -7.098140614810918e-05,
+    "mesh": "150x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 20.089288109128663,
+    "sigma_MPa": 11.25000044704064,
+    "rel_delta": 1.1920996047089087e-07,
+    "rel_sigma": 3.9736945927143106e-08
+   }
+  },
+  {
+   "id": "C4",
+   "description": "Steel bar, textbook check (L/h = 10)",
+   "inputs": {
+    "L_mm": 100,
+    "b_mm": 10,
+    "h_mm": 10,
+    "E_GPa": 200,
+    "F_N": 100,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 0.2,
+    "sigma_MPa": 59.99999999999999
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 0.19999999999833395,
+    "sigma_MPa": 59.999999998997296,
+    "rel_delta": -8.330331867020813e-12,
+    "rel_sigma": -1.6711652278900148e-11
+   },
+   "q8_continuum": {
+    "delta_mm": 0.20109145655265578,
+    "timoshenko_delta_mm": 0.20156000000000002,
+    "rel_vs_timoshenko": -0.002324585470054691,
+    "rel_vs_euler_bernoulli": 0.005457282763278909,
+    "midspan_sigma_MPa": 29.992014674578666,
+    "beam_sigma_at_x_MPa": 29.999999999999996,
+    "rel_midspan_sigma": -0.0002661775140443196,
+    "mesh": "40x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 0.20000000894056746,
+    "sigma_MPa": 60.00000089402409,
+    "rel_delta": 4.4702837216420085e-08,
+    "rel_sigma": 1.4900401607155802e-08
+   }
+  },
+  {
+   "id": "C5",
+   "description": "Stubby aluminium block (L/h = 3)",
+   "inputs": {
+    "L_mm": 30,
+    "b_mm": 20,
+    "h_mm": 10,
+    "E_GPa": 68.9,
+    "F_N": 50,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 0.0039187227866473145,
+    "sigma_MPa": 4.499999999999999
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 0.00391872278661549,
+    "sigma_MPa": 4.49999999994514,
+    "rel_delta": -8.120981399788786e-12,
+    "rel_sigma": -1.2191012501716616e-11
+   },
+   "q8_continuum": {
+    "delta_mm": 0.0042193983313846785,
+    "timoshenko_delta_mm": 0.004258345428156748,
+    "rel_vs_timoshenko": -0.009146063284238667,
+    "rel_vs_euler_bernoulli": 0.07672794456446067,
+    "midspan_sigma_MPa": 2.249560098562166,
+    "beam_sigma_at_x_MPa": 2.2499999999999996,
+    "rel_midspan_sigma": -0.0001955117501481954,
+    "mesh": "20x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 0.003918722523875857,
+    "sigma_MPa": 4.499999899416579,
+    "rel_delta": -6.705538285153357e-08,
+    "rel_sigma": -2.2351871141129075e-08
+   }
+  },
+  {
+   "id": "C6",
+   "description": "Wide thin plate-like section (L/h = 40, b/h = 25)",
+   "inputs": {
+    "L_mm": 80,
+    "b_mm": 50,
+    "h_mm": 2,
+    "E_GPa": 3.5,
+    "F_N": 0.5,
+    "nu_for_continuum": 0.3
+   },
+   "closed_form": {
+    "delta_mm": 0.7314285714285713,
+    "sigma_MPa": 1.2
+   },
+   "inhouse_eb_fe": {
+    "delta_mm": 0.7314285714274431,
+    "sigma_MPa": 1.199999999998344,
+    "rel_delta": -1.5424893485974438e-12,
+    "rel_sigma": -1.3801036402583121e-12
+   },
+   "q8_continuum": {
+    "delta_mm": 0.731387903565646,
+    "timoshenko_delta_mm": 0.7317851428571428,
+    "rel_vs_timoshenko": -0.0005428359613120545,
+    "rel_vs_euler_bernoulli": -5.560059384320508e-05,
+    "midspan_sigma_MPa": 0.5999600748299956,
+    "beam_sigma_at_x_MPa": 0.5999999999999999,
+    "rel_midspan_sigma": -6.65419500070857e-05,
+    "mesh": "160x4 Q8"
+   },
+   "anastruct": {
+    "delta_mm": 0.7314285223822081,
+    "sigma_MPa": 1.1999999731775675,
+    "rel_delta": -6.705557470998616e-08,
+    "rel_sigma": -2.2352027202335497e-08
+   }
+  }
+ ],
+ "checks": [
+  {
+   "case": "C1",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": -7.402205679462277e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C1",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -5.192169919610023e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C1",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": -6.705487037667949e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C1",
+   "check": "anaStruct: root stress",
+   "rel_diff": -2.235106131993234e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C1",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.0017047503041266534,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C1",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -0.00019957893191513656,
+   "tolerance": 0.01,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": 1.9950238872132146e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -7.76645611040294e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": -6.705577467106568e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "anaStruct: root stress",
+   "rel_diff": -2.2352302759342516e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.0033184219814873135,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C2",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -0.0003570629841025945,
+   "tolerance": 0.01,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": -5.911912934506191e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -2.5646554099188914e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": 1.1920996047089087e-07,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "anaStruct: root stress",
+   "rel_diff": 3.9736945927143106e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.0005798466607561566,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C3",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -7.098140614810918e-05,
+   "tolerance": 0.01,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": -8.330331867020813e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -1.6711652278900148e-11,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": 4.4702837216420085e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "anaStruct: root stress",
+   "rel_diff": 1.4900401607155802e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.002324585470054691,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C4",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -0.0002661775140443196,
+   "tolerance": 0.01,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": -8.120981399788786e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -1.2191012501716616e-11,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": -6.705538285153357e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "anaStruct: root stress",
+   "rel_diff": -2.2351871141129075e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.009146063284238667,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C5",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -0.0001955117501481954,
+   "tolerance": 0.01,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "In-house EB FE: tip deflection",
+   "rel_diff": -1.5424893485974438e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "In-house EB FE: root stress",
+   "rel_diff": -1.3801036402583121e-12,
+   "tolerance": 1e-09,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "anaStruct: tip deflection",
+   "rel_diff": -6.705557470998616e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "anaStruct: root stress",
+   "rel_diff": -2.2352027202335497e-08,
+   "tolerance": 1e-05,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "Q8 continuum vs Timoshenko: tip deflection",
+   "rel_diff": -0.0005428359613120545,
+   "tolerance": 0.02,
+   "pass": true
+  },
+  {
+   "case": "C6",
+   "check": "Q8 continuum vs beam theory: mid-span bending stress",
+   "rel_diff": -6.65419500070857e-05,
+   "tolerance": 0.01,
+   "pass": true
+  }
+ ],
+ "summary": {
+  "n_checks": 36,
+  "n_pass": 36,
+  "anastruct_included": true
+ }
+}

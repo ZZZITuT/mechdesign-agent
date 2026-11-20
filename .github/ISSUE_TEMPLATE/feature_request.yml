@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What engineering task is hard or impossible today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+  - type: textarea
+    id: physics
+    attributes:
+      label: Model / physics impact
+      description: Does this need new formulas or assumptions? Please include references and how the change could be verified.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: I have read the "Limitations" section of the README and this is not covered by an existing issue.
+          required: true

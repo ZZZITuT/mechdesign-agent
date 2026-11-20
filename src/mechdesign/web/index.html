@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MechDesign Agent</title>
+<meta name="description" content="Explore rectangular cantilever sensor-mount designs: deterministic beam calculations, design-space search, FE cross-checks.">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">MechDesign Agent <span class="sub">rectangular cantilever sensor-mount explorer</span></div>
+  <div class="top-actions">
+    <span id="mode-badge" class="badge">…</span>
+    <button id="btn-example" class="secondary" title="Reset all inputs to the labelled example configuration">Load example</button>
+    <button id="btn-load-cfg" class="secondary" title="Load inputs from a JSON file (same format as the CLI)">Open inputs…</button>
+    <button id="btn-save-cfg" class="secondary" title="Save the current inputs as JSON (usable with the mechdesign CLI)">Save inputs</button>
+    <input id="file-cfg" type="file" accept="application/json,.json" hidden>
+    <button id="btn-report-html" class="secondary">Export report (HTML)</button>
+    <button id="btn-report-md" class="secondary">Export report (Markdown)</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- ============ Inputs ============ -->
+  <section class="panel inputs" aria-label="Inputs">
+    <h2>Inputs</h2>
+    <div id="example-note" class="note example">EXAMPLE configuration loaded — illustrative values, not a real product specification. Edit any field.</div>
+    <form id="cfg-form" autocomplete="off" novalidate>
+      <fieldset>
+        <legend>Geometry (current design)</legend>
+        <label>Length L <span class="u">mm</span><input name="length_mm" type="number" step="any"></label>
+        <label>Width b <span class="u">mm</span><input name="width_mm" type="number" step="any"></label>
+        <label>Height h (bending direction) <span class="u">mm</span><input name="height_mm" type="number" step="any"></label>
+      </fieldset>
+      <fieldset>
+        <legend>Material</legend>
+        <label>Preset<select id="material-preset"></select></label>
+        <label>Name<input name="material.name" type="text"></label>
+        <label>Young's modulus E <span class="u">GPa</span><input name="material.E_GPa" type="number" step="any"></label>
+        <label>Density ρ <span class="u">kg/m³</span><input name="material.density_kg_m3" type="number" step="any"></label>
+        <div id="material-note" class="hint"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Load &amp; requirements</legend>
+        <label>Tip load F (transverse, −h direction) <span class="u">N</span><input name="load_N" type="number" step="any"></label>
+        <label>Allowable tip deflection <span class="u">mm</span><input name="allowable_deflection_mm" type="number" step="any"></label>
+        <label class="opt"><input type="checkbox" id="use-stress"><span>Allowable bending stress <span class="u">MPa</span></span><input name="allowable_stress_MPa" type="number" step="any"></label>
+        <label class="opt"><input type="checkbox" id="use-aspect"><span>Max aspect ratio h/b <span class="u">(dimensionless)</span></span><input name="max_aspect_ratio" type="number" step="any"></label>
+      </fieldset>
+      <fieldset>
+        <legend>Search space (L, material, load fixed)</legend>
+        <div class="grid3">
+          <span></span><span class="colh">min</span><span class="colh">max</span><span class="colh">step</span>
+          <span class="rowh">b [mm]</span><input name="search.b_min_mm" type="number" step="any"><input name="search.b_max_mm" type="number" step="any"><input name="search.b_step_mm" type="number" step="any">
+          <span class="rowh">h [mm]</span><input name="search.h_min_mm" type="number" step="any"><input name="search.h_max_mm" type="number" step="any"><input name="search.h_step_mm" type="number" step="any">
+        </div>
+        <div id="grid-count" class="hint"></div>
+      </fieldset>
+      <button type="submit" id="btn-run" class="primary">Calculate &amp; compare</button>
+      <div id="errors" class="errors" role="alert" hidden></div>
+    </form>
+    <details class="assumptions">
+      <summary>Model, assumptions &amp; limitations</summary>
+      <p class="formula">I = b h³/12 · m = ρ b h L · δ = F L³/(3 E I) · σ<sub>max</sub> = 6 F L/(b h²)</p>
+      <ul id="assumption-list"></ul>
+      <strong>Not represented:</strong>
+      <ul id="limitation-list"></ul>
+      <p class="hint">Calculations are SI internally; the interface shows mm, N, MPa, GPa and g.</p>
+    </details>
+  </section>
+
+  <!-- ============ Results + visuals ============ -->
+  <section class="panel results" aria-label="Results">
+    <div class="sel-head">
+      <h2 id="sel-title">Current design</h2>
+      <div class="sel-actions">
+        <button id="btn-show-current" class="secondary small">Show current design</button>
+        <button id="btn-adopt" class="secondary small" title="Copy this candidate's b and h into the inputs">Use as current design</button>
+        <button id="btn-crosscheck" class="secondary small" title="Compare with independent FE solvers">Cross-check (FE)</button>
+      </div>
+    </div>
+    <div id="sel-numbers" class="numbers"></div>
+    <div id="sel-checks" class="checks"></div>
+    <div id="crosscheck" class="crosscheck" hidden></div>
+
+    <div class="viz-row">
+      <div class="viz viz3d">
+        <div class="viz-title">3D view <span class="hint">(drag to rotate, scroll to zoom, double-click to reset)</span></div>
+        <div id="view3d" class="view3d"></div>
+        <div class="mag-controls">
+          <label>Deformation magnification ×<input id="mag" type="number" min="1" step="any"></label>
+          <button id="btn-mag-auto" class="secondary small">Auto</button>
+          <label><input type="checkbox" id="show-undeformed" checked> undeformed</label>
+          <label><input type="checkbox" id="show-deformed" checked> deformed</label>
+        </div>
+        <div id="mag-note" class="mag-note"></div>
+      </div>
+      <div class="viz vizplot">
+        <div class="viz-title">Mass vs tip deflection <label class="hint"><input type="checkbox" id="logy" checked> log deflection axis</label></div>
+        <div class="plot-wrap"><canvas id="scatter"></canvas><div id="tooltip" class="tooltip" hidden></div></div>
+        <div class="legend">
+          <span><i class="dot feas"></i>feasible</span><span><i class="dot fdef"></i>fails deflection</span>
+          <span><i class="dot fstr"></i>fails stress/aspect only</span><span><i class="dot cur"></i>current design</span>
+          <span><i class="ring"></i>selected</span><span><i class="line"></i>deflection limit</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="statement" class="statement"></div>
+    <div class="table-head">
+      <h3>Candidate comparison</h3>
+      <div class="tabs">
+        <button class="tab active" data-view="feasible">Feasible, ranked by mass</button>
+        <button class="tab" data-view="all">All candidates</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="cand-table"><thead></thead><tbody></tbody></table></div>
+    <div id="table-foot" class="hint"></div>
+  </section>
+
+  <!-- ============ Assistant ============ -->
+  <section class="panel assistant" aria-label="Assistant">
+    <h2>Assistant</h2>
+    <div id="assistant-mode" class="note"></div>
+    <div id="chat" class="chat"></div>
+    <form id="chat-form" class="chat-form">
+      <textarea id="chat-input" rows="3" placeholder="e.g. “I want this mount to be lighter.”"></textarea>
+      <div class="chips">
+        <button type="button" class="chip">I want this mount to be lighter.</button>
+        <button type="button" class="chip">Make it stiffer without increasing its width.</button>
+        <button type="button" class="chip">Compare designs that deflect less than 0.5 mm.</button>
+        <button type="button" class="chip">Make it more stable.</button>
+      </div>
+      <button type="submit" class="primary">Interpret request</button>
+    </form>
+  </section>
+</main>
+
+<footer class="footer">
+  MechDesign Agent <span id="app-version"></span> · MIT License ·
+  Results are model predictions (Euler–Bernoulli cantilever), not test data — see “Model, assumptions &amp; limitations”. ·
+  <a href="/docs" target="_blank" rel="noopener">HTTP API docs</a>
+</footer>
+
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>
